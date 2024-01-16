@@ -7,6 +7,9 @@
  *  text - Текст, у якому треба здійснити заміну.
  */
 function replaceText(word, replacement, text) {
+  const regex = new RegExp(word, "g"); // Створення регулярного виразу для пошуку слова з флагом 'g' (глобальний пошук).
+  return text.replace(regex, replacement); // Використання методу `replace` регулярного виразу для заміни слова на фразу у тексті та повернення заміненого тексту.
+
   // Створення регулярного виразу для пошуку слова з флагом 'g' (глобальний пошук).
   // Використання методу `replace` регулярного виразу для заміни слова на фразу у тексті.
   // Повернення заміненого тексту.
@@ -32,6 +35,9 @@ console.log(
  *  text - Текст, який треба перевірити.
  */
 function checkWord(word, text) {
+  const regex = new RegExp("\\b" + word + "\\b", "i"); // Створення регулярного виразу для пошуку слова з флагом 'i' (регістронезалежний пошук).
+  return regex.test(text); // Використання методу `test` регулярного виразу для перевірки наявності слова у тексті та повернення результату перевірки.
+
   // Створення регулярного виразу для пошуку слова з флагом 'i' (регістронезалежний пошук).
   // Використання методу `test` регулярного виразу для перевірки наявності слова у тексті.
   // Повернення результату перевірки.
@@ -50,6 +56,9 @@ console.log(checkWord("example", "This is an example sentence."));
  *  str - Рядок, з якого треба вилучити текст.
  */
 function extractTextInParentheses(str) {
+  const regex = /\((.*?)\)/g; // Створення регулярного виразу для пошуку тексту в круглих дужках
+  let matches = Array.from(str.matchAll(regex), (m) => m[1]); // Використання методу `matchAll` для отримання всіх збігів регулярного виразу та створення масиву зі знайденими текстами
+  return matches; // Повернення масиву вилучених текстів
   // Створення регулярного виразу з використанням зворотніх посилань для пошуку тексту в круглих дужках /\((.*?)\)/g.
   // Використання методу `matchAll` для отримання всіх збігів регулярного виразу.
   // Створення масиву зі знайденими текстами.
@@ -70,6 +79,17 @@ console.log(extractTextInParentheses("I have some (text) in (parentheses)."));
  *  str - Рядок, в якому потрібно знайти email-адреси.
  */
 function countEmails(str) {
+  // Створення регулярного виразу для пошуку email-адрес
+  var emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+
+  // Використання методу `match` для отримання всіх збігів регулярного виразу
+  var matches = str.match(emailRegex);
+
+  // Підрахунок кількості email-адрес
+  var count = matches ? matches.length : 0;
+
+  // Повернення кількості email-адрес
+  return count;
   // Створення регулярного виразу для пошуку email-адрес /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g.
   // Використання методу `match` для отримання всіх збігів регулярного виразу.
   // Підрахунок кількості email-адрес.
@@ -93,6 +113,13 @@ console.log(
  *  Повертає масив з індексами всіх входжень слова у рядок.
  */
 function findWordOccurrences(str, word) {
+  let wordRegex = new RegExp(word, "gi");
+  let matches = [];
+  let match;
+  while ((match = wordRegex.exec(str)) !== null) {
+    matches.push(match.index);
+  }
+  return matches;
   // Створення регулярного виразу для пошуку слова з флагами 'g та 'i',
   // Створюємо пустий масив matches, та змінну match без значення
   // За допомогою циклу whild створюємо ітерацію поки рядок містить збіги з регулярним виразом, та змінній match присвоюємо збіги
@@ -122,6 +149,8 @@ console.log(
  * Повертає  - true, якщо флаги 'g' та 'm' присутні, інакше - false.
  */
 function checkRegexFlags(regex) {
+  let flags = regex.toString().match(/\/([gim]*)$/)[1];
+  return flags.includes("g") && flags.includes("m");
   // Отримуємо всі флаги регулярного виразу.
   // Перевіряємо наявність флагів 'g' та 'm' за допомогою методу `includes`.
   // Повертаємо  - true, якщо флаги 'g' та 'm' присутні, інакше - false
@@ -145,6 +174,9 @@ console.log(checkRegexFlags(/pattern/gm));
  * Повертає  - Результат заміни входжень слова у рядку.
  */
 function replaceWordOccurrences(str, word, newWord) {
+  let regex = new RegExp(word, "g");
+  let result = str.replace(regex, newWord);
+  return result;
   // Створюємо регулярний вираз зі словом, використовуючи флаг 'g' для глобального пошуку всіх входжень.
   // Заміняємо всі входження слова у рядку на нове слово.
   // Повертаємо результат
@@ -171,6 +203,29 @@ console.log(
  * Повертає  - Масив флагів, які використовуються у регулярному виразі.
  */
 function checkFlags(regex) {
+  let flags = [];
+  if (regex.flags.includes("i")) {
+    flags.push("ignoreCase");
+  }
+  if (regex.flags.includes("g")) {
+    flags.push("global");
+  }
+  if (regex.flags.includes("m")) {
+    flags.push("multiline");
+  }
+  if (regex.flags.includes("s")) {
+    flags.push("dotAll");
+  }
+  if (regex.flags.includes("u")) {
+    flags.push("unicode");
+  }
+  if (regex.flags.includes("y")) {
+    flags.push("sticky");
+  }
+
+  let source = regex.source;
+  flags.push(source);
+  return flags;
   // Створюємо масив для зберігання використаних флагів.
   // Перевіряємо, чи використовується флаг 'i' (ignoreCase) у регулярному виразі.
   // Додаємо флаг ignoreCase до масиву, якщо він використовується.
@@ -194,6 +249,17 @@ console.log(checkFlags(/pattern/gimsy));
  * Повертає  - Масив методів, які використовуються у регулярному виразі.
  */
 function checkRegexMethods(regex) {
+  const methodsArray = [];
+  if (regex.dotAll) {
+    methodsArray.push("dotAll");
+  }
+  if (regex.multiline) {
+    methodsArray.push("multiline");
+  }
+  if (regex.sticky) {
+    methodsArray.push("sticky");
+  }
+  return methodsArray;
   // Створюємо масив для зберігання використаних методів.
   // Перевіряємо, чи використовується метод `dotAll`.
   // Перевіряємо, чи використовується метод `multiline`.
@@ -217,6 +283,8 @@ console.log(checkRegexMethods(/test/msy));
  * Повертає  - Індекс першого входження слова у рядок або -1, якщо слово не знайдено.
  */
 function findWord(str, word) {
+  const regex = new RegExp("\\b" + word + "\\b");
+  return str.search(regex);
   // Створення регулярного виразу для пошуку слова.
   // Використання методу `search` для пошуку першого входження слова.
 }
